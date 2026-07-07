@@ -708,7 +708,7 @@
         </form>
 
         <div class="wish-list" id="wishList"></div>
-        <p class="rsvp-note">*Versi demo — ucapan tersimpan sementara di halaman ini dan akan hilang saat direfresh.</p>
+        <p class="rsvp-note">*Ucapan tersimpan bersama dan bisa dilihat semua tamu (diperbarui otomatis tiap ±15 detik).</p>
       </section>
 
       <!-- Closing -->
@@ -854,11 +854,14 @@
 
   // ---------- Gallery: using real photos (static markup, no JS generation needed) ----------
 
-  // ---------- RSVP / Wishes (in-memory demo) ----------
-  const wishes = [
+  // ---------- RSVP / Wishes (shared via Google Sheets) ----------
+  const GOOGLE_SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbwiQX_ewz9YDJ65hQEVo7aM32Cjdl6sPn-yw3eBjU97cNAM-unQm13JcvRHd30nk12S/exec';
+
+  let wishes = [
     { name:'Sarah & Budi', attend:'Hadir', msg:'Selamat menempuh hidup baru! Semoga menjadi keluarga yang sakinah, mawaddah, warahmah.' },
-    { name:'Dina Putri', attend:'Hadir', msg:'Barakallahu lakuma, happy wedding Imam & Risma! Sehat selalu.' },
+    { name:'Dina Putri', attend:'Hadir', msg:'Barakallahu lakuma, happy wedding Risma & Imam! Sehat selalu.' },
   ];
+  let wishesLoadedFromSheet = false;
 
   function renderWishes(){
     const list = document.getElementById('wishList');
@@ -874,7 +877,37 @@
     d.textContent = str;
     return d.innerHTML;
   }
+
+  async function loadWishesFromSheet(){
+    try {
+      const res = await fetch(GOOGLE_SHEET_API_URL, {cache:'no-store'});
+      const data = await res.json();
+      if (Array.isArray(data)){
+        const fromSheet = data.map(d => ({ name: d.name, attend: d.attend, msg: d.message }));
+        // keep the two example wishes only until real ones start coming in
+        wishes = fromSheet.length ? fromSheet : wishes;
+        wishesLoadedFromSheet = true;
+        renderWishes();
+      }
+    } catch(err){
+      console.warn('Belum bisa memuat ucapan dari Google Sheet:', err);
+    }
+  }
+
+  async function saveWishToSheet(entry){
+    try {
+      await fetch(GOOGLE_SHEET_API_URL, {
+        method:'POST',
+        body: JSON.stringify({ name: entry.name, attend: entry.attend, message: entry.msg })
+      });
+    } catch(err){
+      console.warn('Belum bisa menyimpan ucapan ke Google Sheet:', err);
+    }
+  }
+
   renderWishes();
+  loadWishesFromSheet();
+  setInterval(loadWishesFromSheet, 15000); // ambil ucapan terbaru tiap 15 detik, terasa hampir realtime
 
   // ---------- Scroll pop-in animation (repeats every time, both directions) ----------
   function initScrollReveal(){
@@ -919,9 +952,11 @@
     const attend = document.getElementById('wattend').value;
     const msg = document.getElementById('wmsg').value.trim();
     if(!name || !msg) return;
-    wishes.unshift({name, attend, msg});
+    const entry = {name, attend, msg};
+    wishes.unshift(entry);
     renderWishes();
     this.reset();
+    saveWishToSheet(entry);
   });
 
   // ---------- Gallery lightbox ----------
