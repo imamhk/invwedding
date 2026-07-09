@@ -73,7 +73,7 @@
   /* ---------- COVER ---------- */
   .cover{
     position:relative; height:100vh; height:100dvh;
-    display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
     text-align:center; padding:32px 24px 32px;
     background:
       radial-gradient(ellipse at 50% 42%, #fbf9f2 0%, #f2ecda 55%, #e9e0c6 100%);
@@ -81,66 +81,73 @@
     -webkit-overflow-scrolling:touch;
   }
   .cover-bg{position:absolute; inset:0; z-index:0;}
-  .cover-frame{
-    position:relative; z-index:1;
-    width:100%; max-width:340px;
-    background:rgba(255,253,247,0.55);
-    backdrop-filter:blur(2px);
-    border:1.5px solid var(--gold-soft);
-    border-radius:170px 170px 30px 30px / 220px 220px 30px 30px;
-    padding:56px 26px 40px;
-    box-shadow:0 10px 40px rgba(120,105,60,0.15);
+
+  @keyframes swayA{
+    0%, 100%{ transform:rotate(-4deg) translateY(0); }
+    50%{ transform:rotate(4deg) translateY(-2px); }
   }
-  .cover-frame::before{
-    content:'';
-    position:absolute; inset:8px;
-    border:1px solid var(--line-gold);
-    border-radius:160px 160px 24px 24px / 210px 210px 24px 24px;
-    pointer-events:none;
+  @keyframes swayB{
+    0%, 100%{ transform:rotate(3deg) translateY(0); }
+    50%{ transform:rotate(-5deg) translateY(-3px); }
   }
-  .cover-names{
-    font-size:clamp(34px, 9vw, 44px);
-    font-weight:500; color:var(--olive-deep);
-    line-height:1.25; margin:14px 0 6px;
+  @keyframes swayC{
+    0%, 100%{ transform:rotate(-3deg) scale(1); }
+    50%{ transform:rotate(5deg) scale(1.03); }
   }
-  .cover-amp{color:var(--gold); display:block; font-size:0.7em; margin:2px 0;}
-  .cover-date{
-    font-size:13px; letter-spacing:3px; color:var(--ink-soft); margin-top:8px;
-  }
-  .cover-frame-photo{padding:0; overflow:hidden; position:relative; height:clamp(280px, 46vh, 460px);}
-  .cover-frame-photo-bg{
-    position:absolute; inset:0;
-    background-size:cover; background-position:center 20%;
-  }
-  .cover-frame-overlay{
-    position:absolute; inset:0;
-    background:linear-gradient(180deg, rgba(20,18,10,0.55) 0%, rgba(20,18,10,0.1) 30%, rgba(20,18,10,0.15) 70%, rgba(20,18,10,0.6) 100%);
-  }
-  .cover-frame-text{
-    position:relative; z-index:1;
-    padding:34px 20px 0;
-    text-align:center;
+  .sway-a{ animation:swayA 4.5s ease-in-out infinite; }
+  .sway-b{ animation:swayB 5.2s ease-in-out infinite; }
+  .sway-c{ animation:swayC 3.8s ease-in-out infinite; }
+  @media (prefers-reduced-motion: reduce){
+    .sway{ animation:none !important; }
   }
 
-  .guest-box{
+  .cover-inner{
     position:relative; z-index:1;
-    width:100%; max-width:320px;
-    margin-top:30px;
+    width:100%;
+    display:flex; flex-direction:column; align-items:center;
+    margin-top:auto; margin-bottom:auto;
+    padding:24px 0;
+  }
+
+  .cover-photo-card{
+    position:relative; z-index:1;
+    width:100%; max-width:290px;
+    aspect-ratio:3/4.1;
+    border-radius:28px;
+    overflow:hidden;
+    border:6px solid #fff;
+    box-shadow:0 14px 34px rgba(90,80,50,0.22);
+    background:var(--cream-deep);
+  }
+  .cover-photo-card img{width:100%; height:100%; object-fit:cover; display:block;}
+
+  .cover-text-block{
+    position:relative; z-index:1;
+    width:100%; max-width:340px;
+    margin-top:26px;
     text-align:center;
   }
-  .guest-box p{font-size:12.5px; color:var(--ink-soft); line-height:1.7;}
+  .cover-names-plain{
+    font-size:clamp(30px, 8vw, 40px);
+    font-weight:500; color:var(--olive-deep);
+    line-height:1.2; margin-bottom:18px;
+  }
+  .cover-guest-text{
+    font-size:14px; color:var(--ink-soft); margin-bottom:6px;
+  }
   .guest-name{
-    font-size:22px; color:var(--olive-deep); font-weight:600; margin:6px 0 18px;
+    font-size:20px; color:var(--olive-deep); font-weight:600; margin:2px 0 18px;
   }
   .btn-open{
-    padding:14px 34px;
+    padding:13px 30px;
     background:var(--olive);
     color:var(--white-ink);
     border:none; border-radius:30px;
-    font-family:'Poppins', sans-serif; font-size:13px; font-weight:500; letter-spacing:1.5px;
+    font-family:'Poppins', sans-serif; font-size:13px; font-weight:500; letter-spacing:1px;
     cursor:pointer;
     box-shadow:0 8px 22px rgba(93,100,70,0.35);
     transition:transform .25s ease;
+    display:inline-flex; align-items:center; justify-content:center;
   }
   .btn-open:hover{transform:translateY(-2px);}
 
@@ -391,9 +398,24 @@
   }
   .reveal.in-view{opacity:1; transform:translateY(0) scale(1);}
 
+  /* tap/touch falling petal effect */
+  .petal{
+    position:fixed; top:0; left:0;
+    pointer-events:none; z-index:9999;
+    will-change:transform, opacity;
+    animation-name:petalFall;
+    animation-timing-function:ease-in;
+    animation-fill-mode:forwards;
+  }
+  @keyframes petalFall{
+    0%{ opacity:1; transform:translate(var(--px), var(--py)) rotate(0deg) scale(1); }
+    100%{ opacity:0; transform:translate(calc(var(--px) + var(--dx)), calc(var(--py) + var(--dy))) rotate(var(--rot)) scale(0.6); }
+  }
+
   @media (prefers-reduced-motion: reduce){
     *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
     .reveal{opacity:1 !important; transform:none !important;}
+    .petal{display:none !important;}
   }
 </style>
 </head>
@@ -444,55 +466,55 @@
         <rect width="400" height="800" fill="url(#glow)"/>
 
         <!-- top-left leaves -->
-        <use href="#leafSprig" transform="translate(60,120) rotate(20) scale(1.3)" style="color:#78805a; opacity:0.45"/>
-        <use href="#leafSprig" transform="translate(150,160) rotate(20) scale(1.2)" style="color:#78805a; opacity:0.4"/>
-        <use href="#flowerBlossom" transform="translate(30,150) scale(1.3)" style="color:#b3915c; opacity:0.4"/>
+        <g class="sway sway-a" style="transform-origin:60px 120px; animation-delay:-0.4s;"><use href="#leafSprig" transform="translate(60,120) rotate(20) scale(1.3)" style="color:#78805a; opacity:0.45"/></g>
+        <g class="sway sway-b" style="transform-origin:150px 160px; animation-delay:-1.6s;"><use href="#leafSprig" transform="translate(150,160) rotate(20) scale(1.2)" style="color:#78805a; opacity:0.4"/></g>
+        <g class="sway sway-c" style="transform-origin:30px 150px; animation-delay:-2.2s;"><use href="#flowerBlossom" transform="translate(30,150) scale(1.3)" style="color:#b3915c; opacity:0.4"/></g>
 
         <!-- top-right leaves (mirrored) -->
-        <use href="#leafSprig" transform="translate(340,120) rotate(-20) scale(1.3)" style="color:#78805a; opacity:0.45"/>
-        <use href="#leafSprig" transform="translate(252,165) rotate(-20) scale(1.2)" style="color:#78805a; opacity:0.4"/>
-        <use href="#flowerBlossom" transform="translate(370,150) scale(1.3)" style="color:#b3915c; opacity:0.4"/>
+        <g class="sway sway-b" style="transform-origin:340px 120px; animation-delay:-0.8s;"><use href="#leafSprig" transform="translate(340,120) rotate(-20) scale(1.3)" style="color:#78805a; opacity:0.45"/></g>
+        <g class="sway sway-a" style="transform-origin:252px 165px; animation-delay:-2.6s;"><use href="#leafSprig" transform="translate(252,165) rotate(-20) scale(1.2)" style="color:#78805a; opacity:0.4"/></g>
+        <g class="sway sway-c" style="transform-origin:370px 150px; animation-delay:-1.1s;"><use href="#flowerBlossom" transform="translate(370,150) scale(1.3)" style="color:#b3915c; opacity:0.4"/></g>
 
         <!-- mid side accents -->
-        <use href="#leafSprig" transform="translate(24,400) rotate(90) scale(1.1)" style="color:#b3915c; opacity:0.22"/>
-        <use href="#leafSprig" transform="translate(378,430) rotate(-90) scale(1.1)" style="color:#b3915c; opacity:0.22"/>
-        <use href="#flowerBlossom" transform="translate(40,340) scale(1.4)" style="color:#c9a875; opacity:0.3"/>
-        <use href="#flowerBlossom" transform="translate(362,470) scale(1.3)" style="color:#c9a875; opacity:0.28"/>
+        <g class="sway sway-b" style="transform-origin:24px 400px; animation-delay:-3.1s;"><use href="#leafSprig" transform="translate(24,400) rotate(90) scale(1.1)" style="color:#b3915c; opacity:0.22"/></g>
+        <g class="sway sway-a" style="transform-origin:378px 430px; animation-delay:-1.9s;"><use href="#leafSprig" transform="translate(378,430) rotate(-90) scale(1.1)" style="color:#b3915c; opacity:0.22"/></g>
+        <g class="sway sway-c" style="transform-origin:40px 340px; animation-delay:-0.6s;"><use href="#flowerBlossom" transform="translate(40,340) scale(1.4)" style="color:#c9a875; opacity:0.3"/></g>
+        <g class="sway sway-b" style="transform-origin:362px 470px; animation-delay:-2.9s;"><use href="#flowerBlossom" transform="translate(362,470) scale(1.3)" style="color:#c9a875; opacity:0.28"/></g>
 
         <!-- bottom-left garden -->
-        <use href="#flowerBlossom" transform="translate(20,700) scale(1.6)" style="color:#b3915c; opacity:0.45"/>
-        <use href="#flowerBlossom" transform="translate(58,682) scale(1.2)" style="color:#78805a; opacity:0.4"/>
-        <use href="#flowerBlossom" transform="translate(90,715) scale(1.4)" style="color:#c9a875; opacity:0.4"/>
-        <use href="#leafSprig" transform="translate(105,760) rotate(15) scale(1.3)" style="color:#78805a; opacity:0.4"/>
-        <use href="#leafSprig" transform="translate(45,745) rotate(35) scale(1.1)" style="color:#5d6446; opacity:0.35"/>
+        <g class="sway sway-a" style="transform-origin:20px 700px; animation-delay:-0.3s;"><use href="#flowerBlossom" transform="translate(20,700) scale(1.6)" style="color:#b3915c; opacity:0.45"/></g>
+        <g class="sway sway-c" style="transform-origin:58px 682px; animation-delay:-1.4s;"><use href="#flowerBlossom" transform="translate(58,682) scale(1.2)" style="color:#78805a; opacity:0.4"/></g>
+        <g class="sway sway-b" style="transform-origin:90px 715px; animation-delay:-2.1s;"><use href="#flowerBlossom" transform="translate(90,715) scale(1.4)" style="color:#c9a875; opacity:0.4"/></g>
+        <g class="sway sway-a" style="transform-origin:105px 760px; animation-delay:-2.7s;"><use href="#leafSprig" transform="translate(105,760) rotate(15) scale(1.3)" style="color:#78805a; opacity:0.4"/></g>
+        <g class="sway sway-c" style="transform-origin:45px 745px; animation-delay:-0.9s;"><use href="#leafSprig" transform="translate(45,745) rotate(35) scale(1.1)" style="color:#5d6446; opacity:0.35"/></g>
 
         <!-- bottom-right garden -->
-        <use href="#flowerBlossom" transform="translate(380,705) scale(1.6)" style="color:#b3915c; opacity:0.45"/>
-        <use href="#flowerBlossom" transform="translate(342,688) scale(1.2)" style="color:#78805a; opacity:0.4"/>
-        <use href="#flowerBlossom" transform="translate(310,718) scale(1.4)" style="color:#c9a875; opacity:0.4"/>
-        <use href="#leafSprig" transform="translate(295,765) rotate(-15) scale(1.3)" style="color:#78805a; opacity:0.4"/>
-        <use href="#leafSprig" transform="translate(355,745) rotate(-35) scale(1.1)" style="color:#5d6446; opacity:0.35"/>
+        <g class="sway sway-b" style="transform-origin:380px 705px; animation-delay:-1.7s;"><use href="#flowerBlossom" transform="translate(380,705) scale(1.6)" style="color:#b3915c; opacity:0.45"/></g>
+        <g class="sway sway-a" style="transform-origin:342px 688px; animation-delay:-3.3s;"><use href="#flowerBlossom" transform="translate(342,688) scale(1.2)" style="color:#78805a; opacity:0.4"/></g>
+        <g class="sway sway-c" style="transform-origin:310px 718px; animation-delay:-2.4s;"><use href="#flowerBlossom" transform="translate(310,718) scale(1.4)" style="color:#c9a875; opacity:0.4"/></g>
+        <g class="sway sway-b" style="transform-origin:295px 765px; animation-delay:-0.5s;"><use href="#leafSprig" transform="translate(295,765) rotate(-15) scale(1.3)" style="color:#78805a; opacity:0.4"/></g>
+        <g class="sway sway-a" style="transform-origin:355px 745px; animation-delay:-1.2s;"><use href="#leafSprig" transform="translate(355,745) rotate(-35) scale(1.1)" style="color:#5d6446; opacity:0.35"/></g>
 
         <!-- scattered small dot flowers along bottom edge -->
-        <use href="#flowerBlossom" transform="translate(150,780) scale(0.9)" style="color:#b3915c; opacity:0.3"/>
-        <use href="#flowerBlossom" transform="translate(200,790) scale(1.1)" style="color:#78805a; opacity:0.3"/>
-        <use href="#flowerBlossom" transform="translate(250,778) scale(0.85)" style="color:#c9a875; opacity:0.3"/>
+        <g class="sway sway-c" style="transform-origin:150px 780px; animation-delay:-1.8s;"><use href="#flowerBlossom" transform="translate(150,780) scale(0.9)" style="color:#b3915c; opacity:0.3"/></g>
+        <g class="sway sway-a" style="transform-origin:200px 790px; animation-delay:-2.5s;"><use href="#flowerBlossom" transform="translate(200,790) scale(1.1)" style="color:#78805a; opacity:0.3"/></g>
+        <g class="sway sway-b" style="transform-origin:250px 778px; animation-delay:-0.2s;"><use href="#flowerBlossom" transform="translate(250,778) scale(0.85)" style="color:#c9a875; opacity:0.3"/></g>
       </svg>
 
-      <div class="cover-frame cover-frame-photo">
-        <div class="cover-frame-photo-bg" style="background-image:url('assets/cover.jpg');"></div>
-        <div class="cover-frame-overlay"></div>
-        <div class="cover-frame-text">
-          <p class="eyebrow eyebrow-white" style="margin-bottom:8px;">THE WEDDING OF</p>
-          <h1 class="cover-names serif" style="color:#fff;">Risma<span class="cover-amp" style="color:#e5cfa0;">&amp;</span>Imam</h1>
-          <p class="cover-date" style="color:#e9e0c6;">02 &middot; 08 &middot; 2026</p>
+      <div class="cover-inner">
+        <div class="cover-photo-card reveal" id="coverPhotoCard">
+          <img src="assets/cover.jpg" alt="Risma &amp; Imam">
         </div>
-      </div>
 
-      <div class="guest-box">
-        <p>Kepada Yth.<br>Bapak/Ibu/Saudara/i</p>
-        <p class="guest-name serif" id="guestName">Tamu Undangan</p>
-        <button class="btn-open" id="openBtn">Buka Undangan</button>
+        <div class="cover-text-block">
+          <h1 class="cover-names-plain serif reveal" id="coverNames">Risma &amp; Imam</h1>
+          <p class="cover-guest-text reveal" id="coverGuestText">Kepada Bapak/Ibu/Saudara/i</p>
+          <p class="guest-name serif reveal" id="guestName">Tamu Undangan</p>
+          <button class="btn-open reveal" id="openBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px; vertical-align:-3px;"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+            Buka Undangan
+          </button>
+        </div>
       </div>
     </section>
 
@@ -507,8 +529,8 @@
             <use href="#treeCluster" transform="translate(380,60) scale(-1.1,1.1)" style="color:#faf7ee; opacity:0.08"/>
             <use href="#treeCluster" transform="translate(370,550) scale(-1.5,1.5)" style="color:#4a4f39; opacity:0.35"/>
             <use href="#treeCluster" transform="translate(30,560) scale(1.1)" style="color:#4a4f39; opacity:0.3"/>
-            <use href="#leafSprig" transform="translate(340,480) rotate(-15) scale(1.1)" style="color:#faf7ee; opacity:0.15"/>
-            <use href="#flowerBlossom" transform="translate(55,500) scale(1.2)" style="color:#faf7ee; opacity:0.15"/>
+            <g class="sway sway-a" style="transform-origin:340px 480px; animation-delay:-1.3s;"><use href="#leafSprig" transform="translate(340,480) rotate(-15) scale(1.1)" style="color:#faf7ee; opacity:0.15"/></g>
+            <g class="sway sway-b" style="transform-origin:55px 500px; animation-delay:-2.8s;"><use href="#flowerBlossom" transform="translate(55,500) scale(1.2)" style="color:#faf7ee; opacity:0.15"/></g>
           </svg>
         </div>
         <div class="verse-photo">
@@ -528,8 +550,8 @@
             <use href="#treeCluster" transform="translate(370,480) scale(-1.2,1.2)" style="color:#78805a; opacity:0.1"/>
             <use href="#treeCluster" transform="translate(35,860) scale(1.3)" style="color:#5d6446; opacity:0.12"/>
             <use href="#treeCluster" transform="translate(365,870) scale(-1.3,1.3)" style="color:#5d6446; opacity:0.12"/>
-            <use href="#flowerBlossom" transform="translate(60,140) scale(1.1)" style="color:#c9a875; opacity:0.18"/>
-            <use href="#flowerBlossom" transform="translate(340,150) scale(1.1)" style="color:#c9a875; opacity:0.18"/>
+            <g class="sway sway-c" style="transform-origin:60px 140px; animation-delay:-1.9s;"><use href="#flowerBlossom" transform="translate(60,140) scale(1.1)" style="color:#c9a875; opacity:0.18"/></g>
+            <g class="sway sway-a" style="transform-origin:340px 150px; animation-delay:-0.7s;"><use href="#flowerBlossom" transform="translate(340,150) scale(1.1)" style="color:#c9a875; opacity:0.18"/></g>
           </svg>
         </div>
         <h2 class="section-title serif">Bride &amp; Groom</h2>
@@ -537,9 +559,9 @@
 
         <div class="couple-card">
           <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
-            <svg width="26" height="46" viewBox="-20 -45 40 60" style="color:#b3915c; opacity:0.6; flex-shrink:0;"><use href="#leafSprig" transform="scale(1) rotate(-20)"/></svg>
+            <svg width="26" height="46" viewBox="-20 -45 40 60" style="color:#b3915c; opacity:0.6; flex-shrink:0;"><g class="sway sway-a" style="transform-origin:0px 0px; animation-delay:-0.6s;"><use href="#leafSprig" transform="scale(1) rotate(-20)"/></g></svg>
             <div class="couple-photo"><img src="assets/risma.jpg" alt="Risma Meilani" style="width:100%; height:100%; object-fit:cover; border-radius:115px;"></div>
-            <svg width="26" height="46" viewBox="-20 -45 40 60" style="color:#b3915c; opacity:0.6; flex-shrink:0; transform:scaleX(-1);"><use href="#leafSprig" transform="scale(1) rotate(-20)"/></svg>
+            <svg width="26" height="46" viewBox="-20 -45 40 60" style="color:#b3915c; opacity:0.6; flex-shrink:0; transform:scaleX(-1);"><g class="sway sway-b" style="transform-origin:0px 0px; animation-delay:-2.1s;"><use href="#leafSprig" transform="scale(1) rotate(-20)"/></g></svg>
           </div>
           <h3 class="serif">Risma Meilani S.M</h3>
           <p class="parents">Putri dari<br>Ibu Nene Sukaenah &amp; Bapak Edi Garmadi</p>
@@ -549,9 +571,9 @@
 
         <div class="couple-card">
           <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
-            <svg width="26" height="46" viewBox="-20 -45 40 60" style="color:#b3915c; opacity:0.6; flex-shrink:0;"><use href="#leafSprig" transform="scale(1) rotate(-20)"/></svg>
+            <svg width="26" height="46" viewBox="-20 -45 40 60" style="color:#b3915c; opacity:0.6; flex-shrink:0;"><g class="sway sway-c" style="transform-origin:0px 0px; animation-delay:-1.4s;"><use href="#leafSprig" transform="scale(1) rotate(-20)"/></g></svg>
             <div class="couple-photo"><img src="assets/imam.jpg" alt="Imam Hergyanto Kusuma" style="width:100%; height:100%; object-fit:cover; border-radius:115px;"></div>
-            <svg width="26" height="46" viewBox="-20 -45 40 60" style="color:#b3915c; opacity:0.6; flex-shrink:0; transform:scaleX(-1);"><use href="#leafSprig" transform="scale(1) rotate(-20)"/></svg>
+            <svg width="26" height="46" viewBox="-20 -45 40 60" style="color:#b3915c; opacity:0.6; flex-shrink:0; transform:scaleX(-1);"><g class="sway sway-a" style="transform-origin:0px 0px; animation-delay:-3.0s;"><use href="#leafSprig" transform="scale(1) rotate(-20)"/></g></svg>
           </div>
           <h3 class="serif">Imam Hergyanto Kusuma S.I.Kom.</h3>
           <p class="parents">Putra dari<br>Ibu Tri Yatni &amp; Bapak Tata Kusmana</p>
@@ -566,8 +588,8 @@
             <use href="#treeCluster" transform="translate(380,55) scale(-1.1,1.1)" style="color:#faf7ee; opacity:0.08"/>
             <use href="#treeCluster" transform="translate(30,1040) scale(1.4)" style="color:#4a4f39; opacity:0.35"/>
             <use href="#treeCluster" transform="translate(370,1050) scale(-1.4,1.4)" style="color:#4a4f39; opacity:0.35"/>
-            <use href="#leafSprig" transform="translate(365,300) rotate(-20) scale(1.1)" style="color:#faf7ee; opacity:0.12"/>
-            <use href="#leafSprig" transform="translate(35,320) rotate(20) scale(1.1)" style="color:#faf7ee; opacity:0.12"/>
+            <g class="sway sway-a" style="transform-origin:365px 300px; animation-delay:-0.4s;"><use href="#leafSprig" transform="translate(365,300) rotate(-20) scale(1.1)" style="color:#faf7ee; opacity:0.12"/></g>
+            <g class="sway sway-b" style="transform-origin:35px 320px; animation-delay:-1.1s;"><use href="#leafSprig" transform="translate(35,320) rotate(20) scale(1.1)" style="color:#faf7ee; opacity:0.12"/></g>
           </svg>
         </div>
         <h2 class="count-title serif">Save The Date</h2>
@@ -580,8 +602,8 @@
         </div>
 
         <div class="arch-panel">
-          <svg width="34" height="60" viewBox="-20 -45 40 60" style="position:absolute; top:14px; left:10px; color:#b3915c; opacity:0.5;"><use href="#leafSprig" transform="rotate(-25)"/></svg>
-          <svg width="34" height="60" viewBox="-20 -45 40 60" style="position:absolute; top:14px; right:10px; color:#b3915c; opacity:0.5; transform:scaleX(-1);"><use href="#leafSprig" transform="rotate(-25)"/></svg>
+          <svg width="34" height="60" viewBox="-20 -45 40 60" style="position:absolute; top:14px; left:10px; color:#b3915c; opacity:0.5;"><g class="sway sway-b" style="transform-origin:0px 0px; animation-delay:-0.9s;"><use href="#leafSprig" transform="rotate(-25)"/></g></svg>
+          <svg width="34" height="60" viewBox="-20 -45 40 60" style="position:absolute; top:14px; right:10px; color:#b3915c; opacity:0.5; transform:scaleX(-1);"><g class="sway sway-c" style="transform-origin:0px 0px; animation-delay:-2.4s;"><use href="#leafSprig" transform="rotate(-25)"/></g></svg>
           <div class="event-name serif">Akad Nikah</div>
           <div class="event-rule"></div>
           <div class="event-date">Minggu, 2 Agustus 2026</div>
@@ -613,8 +635,8 @@
           <svg viewBox="0 0 400 600" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
             <use href="#treeCluster" transform="translate(25,50) scale(1.2)" style="color:#78805a; opacity:0.1"/>
             <use href="#treeCluster" transform="translate(375,540) scale(-1.3,1.3)" style="color:#b3915c; opacity:0.1"/>
-            <use href="#flowerBlossom" transform="translate(50,540) scale(1.1)" style="color:#c9a875; opacity:0.16"/>
-            <use href="#flowerBlossom" transform="translate(350,60) scale(1.1)" style="color:#c9a875; opacity:0.16"/>
+            <g class="sway sway-c" style="transform-origin:50px 540px; animation-delay:-1.8s;"><use href="#flowerBlossom" transform="translate(50,540) scale(1.1)" style="color:#c9a875; opacity:0.16"/></g>
+            <g class="sway sway-a" style="transform-origin:350px 60px; animation-delay:-2.5s;"><use href="#flowerBlossom" transform="translate(350,60) scale(1.1)" style="color:#c9a875; opacity:0.16"/></g>
           </svg>
         </div>
         <p class="eyebrow eyebrow-olive">GALERI</p>
@@ -684,7 +706,7 @@
           <svg viewBox="0 0 400 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
             <use href="#treeCluster" transform="translate(25,50) scale(1.2)" style="color:#78805a; opacity:0.1"/>
             <use href="#treeCluster" transform="translate(375,850) scale(-1.3,1.3)" style="color:#5d6446; opacity:0.1"/>
-            <use href="#flowerBlossom" transform="translate(355,55) scale(1) " style="color:#c9a875; opacity:0.14"/>
+            <g class="sway sway-b" style="transform-origin:355px 55px; animation-delay:-3.0s;"><use href="#flowerBlossom" transform="translate(355,55) scale(1) " style="color:#c9a875; opacity:0.14"/></g>
           </svg>
         </div>
         <h2 class="serif" style="font-size:27px; margin:10px 0 10px; font-weight:500; color:var(--gold);">Konfirmasi Kehadiran</h2>
@@ -698,7 +720,6 @@
           <select id="wattend">
             <option value="Hadir">Hadir</option>
             <option value="Tidak Hadir">Tidak Hadir</option>
-            <option value="Masih Ragu">Masih Ragu</option>
           </select>
 
           <label for="wmsg">Ucapan &amp; Doa</label>
@@ -719,10 +740,10 @@
             <use href="#treeCluster" transform="translate(375,60) scale(-1.2,1.2)" style="color:#faf7ee; opacity:0.08"/>
             <use href="#treeCluster" transform="translate(35,545) scale(1.5)" style="color:#4a4f39; opacity:0.4"/>
             <use href="#treeCluster" transform="translate(365,550) scale(-1.5,1.5)" style="color:#4a4f39; opacity:0.4"/>
-            <use href="#flowerBlossom" transform="translate(55,480) scale(1.3)" style="color:#c9a875; opacity:0.3"/>
-            <use href="#flowerBlossom" transform="translate(345,485) scale(1.3)" style="color:#c9a875; opacity:0.3"/>
-            <use href="#leafSprig" transform="translate(90,520) rotate(15) scale(1.1)" style="color:#faf7ee; opacity:0.15"/>
-            <use href="#leafSprig" transform="translate(310,525) rotate(-15) scale(1.1)" style="color:#faf7ee; opacity:0.15"/>
+            <g class="sway sway-c" style="transform-origin:55px 480px; animation-delay:-0.7s;"><use href="#flowerBlossom" transform="translate(55,480) scale(1.3)" style="color:#c9a875; opacity:0.3"/></g>
+            <g class="sway sway-a" style="transform-origin:345px 485px; animation-delay:-1.5s;"><use href="#flowerBlossom" transform="translate(345,485) scale(1.3)" style="color:#c9a875; opacity:0.3"/></g>
+            <g class="sway sway-b" style="transform-origin:90px 520px; animation-delay:-2.2s;"><use href="#leafSprig" transform="translate(90,520) rotate(15) scale(1.1)" style="color:#faf7ee; opacity:0.15"/></g>
+            <g class="sway sway-c" style="transform-origin:310px 525px; animation-delay:-2.9s;"><use href="#leafSprig" transform="translate(310,525) rotate(-15) scale(1.1)" style="color:#faf7ee; opacity:0.15"/></g>
           </svg>
         </div>
         <p class="eyebrow eyebrow-white">TERIMA KASIH</p>
@@ -760,6 +781,24 @@
   if (guest) {
     document.getElementById('guestName').textContent = decodeURIComponent(guest);
   }
+
+  // ---------- Cover entrance pop-in animation ----------
+  function revealCoverElements(){
+    const items = [
+      document.getElementById('coverPhotoCard'),
+      document.getElementById('coverNames'),
+      document.getElementById('coverGuestText'),
+      document.getElementById('guestName'),
+      document.getElementById('openBtn'),
+    ];
+    items.forEach((el, i) => {
+      if (!el) return;
+      setTimeout(() => el.classList.add('in-view'), 120 + i * 160);
+    });
+  }
+  window.addEventListener('DOMContentLoaded', revealCoverElements);
+  // fallback in case DOMContentLoaded already fired before this script ran
+  if (document.readyState !== 'loading') revealCoverElements();
 
   // ---------- Open invitation ----------
   const openBtn = document.getElementById('openBtn');
@@ -1013,6 +1052,37 @@
     if (Math.abs(dx) > 40){
       if (dx > 0) showPrev(); else showNext();
     }
+  }, {passive:true});
+
+  // ---------- Tap/touch falling petals ----------
+  const petalColors = ['#c9a875', '#b3915c', '#93996e', '#78805a', '#e5cfa0'];
+  function spawnPetals(x, y){
+    const count = 5 + Math.floor(Math.random() * 3);
+    for (let i = 0; i < count; i++){
+      const petal = document.createElement('div');
+      petal.className = 'petal';
+      const size = 8 + Math.random() * 8;
+      const color = petalColors[Math.floor(Math.random() * petalColors.length)];
+      const dx = (Math.random() - 0.5) * 140;
+      const dy = 90 + Math.random() * 120;
+      const rot = (Math.random() - 0.5) * 360;
+      const duration = 1.1 + Math.random() * 0.8;
+      petal.style.width = size + 'px';
+      petal.style.height = size * 0.8 + 'px';
+      petal.style.background = color;
+      petal.style.borderRadius = '50% 0 50% 50%';
+      petal.style.setProperty('--px', x + 'px');
+      petal.style.setProperty('--py', y + 'px');
+      petal.style.setProperty('--dx', dx + 'px');
+      petal.style.setProperty('--dy', dy + 'px');
+      petal.style.setProperty('--rot', rot + 'deg');
+      petal.style.animationDuration = duration + 's';
+      document.body.appendChild(petal);
+      petal.addEventListener('animationend', () => petal.remove());
+    }
+  }
+  document.addEventListener('pointerdown', (e) => {
+    spawnPetals(e.clientX, e.clientY);
   }, {passive:true});
 
   // ---------- Copy to clipboard ----------
