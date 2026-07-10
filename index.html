@@ -6,7 +6,7 @@
 <title>The Wedding of Risma & Imam</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Amiri:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
     --cream:#f8f4ea;
@@ -111,6 +111,9 @@
     content:''; position:absolute; left:0; right:0; bottom:0; height:50%;
     background:linear-gradient(to bottom, rgba(248,244,234,0) 0%, var(--cream) 90%);
     pointer-events:none;
+  }
+  .cover-hero-olive::after{
+    background:linear-gradient(to bottom, rgba(93,100,70,0) 0%, var(--olive) 90%);
   }
 
   .cover-inner{
@@ -341,6 +344,14 @@
   }
   .closing-names{font-size:34px; font-weight:500; color:#fff;}
   .closing-thanks{font-size:13px; color:var(--white-ink-dim); margin-top:10px;}
+  .arabic-text{
+    font-family:'Amiri', serif;
+    font-size:26px;
+    color:var(--gold);
+    margin-bottom:14px;
+    line-height:1.8;
+  }
+  .salam-text{font-size:13px; margin-bottom:16px;}
   .credit{font-size:10px; letter-spacing:2px; color:rgba(250,247,238,0.45); margin-top:40px; text-transform:uppercase;}
 
   /* music button */
@@ -537,23 +548,23 @@
     <main class="main-content" id="mainContent">
 
       <!-- Opening: hero photo + names/date + verse -->
-      <section class="block block-cream" style="padding:0;">
+      <section class="block block-olive" style="padding:0;">
         <div class="watermark">
           <svg viewBox="0 0 400 600" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-            <use href="#treeCluster" transform="translate(370,550) scale(-1.5,1.5)" style="color:#5d6446; opacity:0.12"/>
-            <use href="#treeCluster" transform="translate(30,560) scale(1.1)" style="color:#5d6446; opacity:0.1"/>
-            <g class="sway sway-a" style="transform-origin:340px 480px; animation-delay:-1.3s;"><use href="#leafSprig" transform="translate(340,480) rotate(-15) scale(1.1)" style="color:#78805a; opacity:0.3"/></g>
-            <g class="sway sway-b" style="transform-origin:55px 500px; animation-delay:-2.8s;"><use href="#flowerBlossom" transform="translate(55,500) scale(1.2)" style="color:#b3915c; opacity:0.3"/></g>
+            <use href="#treeCluster" transform="translate(370,550) scale(-1.5,1.5)" style="color:#4a4f39; opacity:0.3"/>
+            <use href="#treeCluster" transform="translate(30,560) scale(1.1)" style="color:#4a4f39; opacity:0.25"/>
+            <g class="sway sway-a" style="transform-origin:340px 480px; animation-delay:-1.3s;"><use href="#leafSprig" transform="translate(340,480) rotate(-15) scale(1.1)" style="color:#faf7ee; opacity:0.2"/></g>
+            <g class="sway sway-b" style="transform-origin:55px 500px; animation-delay:-2.8s;"><use href="#flowerBlossom" transform="translate(55,500) scale(1.2)" style="color:#e5cfa0; opacity:0.22"/></g>
           </svg>
         </div>
-        <div class="cover-hero reveal" style="height:46vh;">
+        <div class="cover-hero cover-hero-olive reveal" style="height:46vh;">
           <img src="assets/verse.jpg" alt="Risma &amp; Imam">
         </div>
         <div class="reveal" style="position:relative; z-index:1; padding:0 26px 30px; text-align:center; margin-top:-24px;">
-          <h2 class="serif" style="font-size:clamp(26px,7vw,34px); font-weight:500; color:var(--olive-deep); margin-bottom:6px;">Risma &amp; Imam</h2>
-          <p style="font-size:14px; color:var(--ink-soft); margin-bottom:22px; letter-spacing:0.5px;">Minggu, 2 Agustus 2026</p>
-          <p class="verse-text" style="color:var(--ink); max-width:360px; margin-left:auto; margin-right:auto;">"Dan di antara tanda-tanda kebesaran-Nya ialah diciptakan-Nya pasangan hidup untukmu dari jenismu sendiri, agar hatimu merasa tenang bersamanya, serta dijadikan-Nya di antara kalian rasa kasih dan sayang."</p>
-          <p class="verse-cite" style="color:var(--ink-soft);">(QS. Ar-Rum : 21)</p>
+          <h2 class="serif" style="font-size:clamp(26px,7vw,34px); font-weight:500; color:var(--white-ink); margin-bottom:6px;">Risma &amp; Imam</h2>
+          <p style="font-size:14px; color:var(--white-ink-dim); margin-bottom:22px; letter-spacing:0.5px;">Minggu, 2 Agustus 2026</p>
+          <p class="verse-text" style="color:var(--white-ink); max-width:360px; margin-left:auto; margin-right:auto;">"Dan di antara tanda-tanda kebesaran-Nya ialah diciptakan-Nya pasangan hidup untukmu dari jenismu sendiri, agar hatimu merasa tenang bersamanya, serta dijadikan-Nya di antara kalian rasa kasih dan sayang."</p>
+          <p class="verse-cite" style="color:var(--white-ink-dim);">(QS. Ar-Rum : 21)</p>
         </div>
       </section>
 
@@ -572,6 +583,8 @@
           </svg>
         </div>
         <h2 class="section-title serif">Bride &amp; Groom</h2>
+        <p class="arabic-text" dir="rtl">بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ</p>
+        <p class="salam-text" style="color:var(--ink-soft);">Assalamu'alaikum Warahmatullahi Wabarakatuh</p>
         <p class="section-desc">Tanpa mengurangi rasa hormat, kami mengundang Bapak/Ibu/Saudara/i serta kerabat sekalian untuk menghadiri acara pernikahan kami.</p>
 
         <div class="couple-card">
@@ -671,7 +684,7 @@
           <div class="gallery-item" data-index="4"><img src="assets/gallery5.jpg" alt="Momen Risma &amp; Imam" style="width:100%; height:100%; object-fit:cover; border-radius:12px; cursor:pointer;"></div>
           <div class="gallery-item" data-index="5"><img src="assets/gallery6.jpg" alt="Momen Risma &amp; Imam" style="width:100%; height:100%; object-fit:cover; border-radius:12px; cursor:pointer;"></div>
         </div>
-        <p class="rsvp-note">*Ketuk foto untuk melihat lebih besar &amp; geser untuk lihat lainnya.</p>
+
       </section>
 
       <!-- Gift -->
@@ -751,7 +764,7 @@
         </form>
 
         <div class="wish-list" id="wishList"></div>
-        <p class="rsvp-note">*Ucapan tersimpan bersama dan bisa dilihat semua tamu (diperbarui otomatis tiap ±15 detik).</p>
+
       </section>
 
       <!-- Closing -->
@@ -768,10 +781,12 @@
             <g class="sway sway-c" style="transform-origin:310px 525px; animation-delay:-2.9s;"><use href="#leafSprig" transform="translate(310,525) rotate(-15) scale(1.1)" style="color:#faf7ee; opacity:0.345"/></g>
           </svg>
         </div>
-        <p class="eyebrow eyebrow-white">TERIMA KASIH</p>
+        <div class="verse-photo reveal" style="margin-bottom:26px;">
+          <img src="assets/gallery5.jpg" alt="Risma &amp; Imam" style="width:100%; height:100%; object-fit:cover;">
+        </div>
         <p class="closing-quote">"Merupakan suatu kebahagiaan dan kehormatan bagi kami, apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu kepada kedua mempelai."</p>
-        <h2 class="closing-names serif">Risma &amp; Imam</h2>
         <p class="closing-thanks">Wassalamu'alaikum Warahmatullahi Wabarakatuh</p>
+        <h2 class="closing-names serif">Risma &amp; Imam</h2>
         <p class="credit">Made with love &middot; 2026</p>
       </section>
 
